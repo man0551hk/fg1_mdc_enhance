@@ -1,0 +1,47 @@
+                               Ficom Systems Ltd
+
+                       Contamination Monitoring Result by
+                   Food/Water Contamination Monitoring System
+
+From:                         Ficom Systems Ltd
+Serial Number:                12345678
+=====================================================================
+Sample Name/Type:             KCl Test / Test
+Sampling Location:            Oak Ridge
+Detector:                     DigiBASE
+Sample Weight:                1.00 Kilograms
+Alarm Reporting:              Absolute
+Food Type:                    CODEX - Imported Food
+Sample Team:                  Team A
+Sample Code:                  TK-OR-1709020900-FI-A
+Sampling Date:                02 / 09 / 2017 Sampling Time: 09 : 00
+                              DD / MM / YYYY                HH : MM
+Food Origin:                  TEST
+=====================================================================
+Measurement Location:         TEST
+
+Measurement Date/Time:        09 : 00     02 / 09 / 2017
+                              HH : MM     DD / MM / YYYY
+Counting Time:                1.00 Min
+
+Radionuclide           Activity (Bq/Kg)
+---------------------------------------------------------------------
+I-131                           645.54    Detected            64.8163
+Ru-103                          604.04    Detected            90.0987
+Cs-137                          429.21    Detected           110.6483
+Cs-134                          458.18    Detected            92.6134
+K-40                           7828.15*   Detected          1538.4707
+Cs-137/Cs-134                   887.39    Detected           203.2616
+
+  Ratio Sum:                   9.9651
+  Input Count Rate:          763.2833
+
+* Alarm Level Exceeded
+=====================================================================
+
+Originator: _________________________ Post: _________________________
+                    (Name & Signature)
+
+Date:  __ / __ / ____   Time:  __ : __
+       DD / MM / YYYY          HH : MM
+

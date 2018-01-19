@@ -1,0 +1,27 @@
+                                        
+
+                       Contamination Monitoring Result by
+                   Food/Water Contamination Monitoring System
+
+From:                         FI
+Serial Number:                
+=====================================================================
+Detector:                     DigiBASE
+Sample Weight:                5.00 Kilograms
+Alarm Reporting:              Absolute
+Food Type:                    CODEX - Imported Food
+Measurement Date/Time:        17 : 35         06 / 09 / 2017
+                              HH : MM         DD / MM / YYYY
+Counting Time:                1.00 Min
+
+      I-131          Activity:      35.57 Bq/Kg   
+      Ru-103         Activity:       2.64 Bq/Kg   
+      Cs-137         Activity:      44.74 Bq/Kg   
+      Cs-134         Activity:       0.00 Bq/Kg   
+      K-40           Activity:       0.00 Bq/Kg   
+      Cs-137/Cs-134  Activity:      44.74 Bq/Kg   
+
+  Ratio Sum:                   0.0829
+  Input Count Rate:          780.4333
+
+

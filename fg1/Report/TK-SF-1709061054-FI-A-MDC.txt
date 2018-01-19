@@ -1,0 +1,46 @@
+                               Ficom Systems Ltd
+
+                       Contamination Monitoring Result by
+                   Food/Water Contamination Monitoring System
+
+From:                         Ficom Systems Ltd
+Serial Number:                12345678
+=====================================================================
+Sample Name/Type:             KCl Test / Test
+Sampling Location:            Kowloon
+Detector:                     DigiBASE
+Sample Weight:                5.00 Kilograms
+Alarm Reporting:              Absolute
+Food Type:                    CODEX - Imported Food
+Sample Team:                  Team A
+Sample Code:                  TK-SF-1709061054-FI-A
+Sampling Date:                06 / 09 / 2017 Sampling Time: 10 : 54
+                              DD / MM / YYYY                HH : MM
+Food Origin:                  TEST4
+=====================================================================
+Measurement Location:         TEST4
+
+Measurement Date/Time:        10 : 54     06 / 09 / 2017
+                              HH : MM     DD / MM / YYYY
+Counting Time:                1.00 Min
+
+Radionuclide           Activity (Bq/Kg)                        Remark
+---------------------------------------------------------------------
+I-131                            22.68    Not Detected        12.9633
+Ru-103                            3.57    Not Detected       <18.0197
+Cs-137                           43.88    Not Detected        22.1297
+Cs-134                            2.88    Not Detected       <18.5227
+K-40                            117.62    Not Detected      <307.6941
+Cs-137/Cs-134                    46.76    Not Detected        40.6523
+
+  Ratio Sum:                   0.1906
+  Input Count Rate:          769.4000
+
+=====================================================================
+
+Originator: _________________________ Post: _________________________
+                    (Name & Signature)
+
+Date:  __ / __ / ____   Time:  __ : __
+       DD / MM / YYYY          HH : MM
+

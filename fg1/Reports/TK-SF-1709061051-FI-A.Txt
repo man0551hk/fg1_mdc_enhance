@@ -1,0 +1,46 @@
+                               Ficom Systems Ltd
+
+                       Contamination Monitoring Result by
+                   Food/Water Contamination Monitoring System
+
+From:                         Ficom Systems Ltd
+Serial Number:                12345678
+================================================================================
+Sample Name/Type:             KCl Test / Test
+Sampling Location:            Kowloon
+Detector:                     DigiBASE
+Sample Weight:                5.00 Kilograms
+Alarm Reporting:              Absolute
+Food Type:                    CODEX - Imported Food
+Sample Team:                  Team A
+Sample Code:                  TK-SF-1709061051-FI-A
+Sampling Date:                06 / 09 / 2017 Sampling Time: 10 : 51
+                              DD / MM / YYYY                HH : MM
+Food Origin:                  TEST3
+================================================================================
+Measurement Location:         TEST3
+
+Measurement Date/Time:        10 : 51     06 / 09 / 2017
+                              HH : MM     DD / MM / YYYY
+Counting Time:                1.00 Min
+
+          Radionuclide                 Activity (Bq/Kg)
+          -------------------------------------------------------------
+          I-131                                   27.19    Not Detected
+          Ru-103                                   2.29    Not Detected
+          Cs-137                                  38.94    Not Detected
+          Cs-134                                   9.78    Not Detected
+          K-40                                   270.29    Not Detected
+          Cs-137/Cs-134                           48.71    Not Detected
+
+  Ratio Sum:                   0.3485
+  Input Count Rate:          792.9333
+
+================================================================================
+
+Originator: _______________________________ Post: ______________________________
+                         (Name & Signature)
+
+Date:  __ / __ / ____   Time:  __ : __
+       DD / MM / YYYY          HH : MM
+
