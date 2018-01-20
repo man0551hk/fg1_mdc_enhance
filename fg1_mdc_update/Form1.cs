@@ -569,7 +569,7 @@ namespace fg1_mdc_update
                         File.Delete(tempPath);
                     }
                     File.Copy(path, tempPath);
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                 }
                 catch (Exception ex)
                 {
@@ -947,6 +947,10 @@ namespace fg1_mdc_update
         Thread readThread = null;
         private void ctrlBtn_Click(object sender, EventArgs e)
         {
+            if (readThread != null)
+            {
+                readThread.Abort();
+            }
             readThread = new Thread(new ThreadStart(StartTrigger));
             if (ctrlBtn.Text == "Auto Off")
             {
