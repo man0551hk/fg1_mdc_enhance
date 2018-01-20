@@ -22,6 +22,15 @@ namespace fg1_mdc_update
         Report report = new Report();
         string jsonPath = AppDomain.CurrentDomain.BaseDirectory + "initSetup.json";
 
+        public static bool autoPrint = false;
+
+        public const bool includeMDC = false;
+        public const bool showI131 = false;
+        public const bool showRu103 = true;
+        public const bool showCs137 = true;
+        public const bool showCs134 = true;
+        public const bool showK40 = true;
+        public const bool show137134 = true;
 
         public const double i131Br = 0.817;
         public const double ru103Br = 0.91;
@@ -462,7 +471,7 @@ namespace fg1_mdc_update
                         File.Delete(tempPath);
                     }
                     File.Copy(path, tempPath);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
                 catch (Exception ex)
                 {
@@ -473,7 +482,7 @@ namespace fg1_mdc_update
                 {
                     isRead = false;
                     WriteLogThread(tempPath + " not existed");
-                    Thread.Sleep(1000); // sleep 1 sec to wwait release
+                    Thread.Sleep(500); // sleep 1 sec to wwait release
                 }
                 if (isRead)
                 {
@@ -560,7 +569,7 @@ namespace fg1_mdc_update
                         File.Delete(tempPath);
                     }
                     File.Copy(path, tempPath);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
                 catch (Exception ex)
                 {
@@ -755,11 +764,27 @@ namespace fg1_mdc_update
             {
                 if (reportLines[i].Contains("Radionuclide") && reportLines[i].Contains("Activity (Bq/Kg)"))
                 {
-                    sb.AppendLine("Radionuclide           Activity (Bq/Kg)          Report Value (Bq/Kg)"); // Modified MDC Value to Report Value by Ron
+                    if (includeMDC)
+                    {
+                        sb.AppendLine("Radionuclide           Activity (Bq/Kg)          Report Value (Bq/Kg)");
+                    }
+                    else
+                    {
+                        sb.AppendLine("Radionuclide           Activity (Bq/Kg)          ");
+                    }
+                     // Modified MDC Value to Report Value by Ron
                 }
                 else if (reportLines[i].Contains("Radionuclide") && reportLines[i].Contains("Activity (Bq/L)"))
                 {
-                    sb.AppendLine("Radionuclide           Activity (Bq/L)            Report Value (Bq/L)"); // Modified MDC Value to Report Value by Ron
+                    if (includeMDC)
+                    {
+                        sb.AppendLine("Radionuclide           Activity (Bq/L)            Report Value (Bq/L)");
+                    }
+                    else
+                    {
+                        sb.AppendLine("Radionuclide           Activity (Bq/L)            ");
+                    }
+                     // Modified MDC Value to Report Value by Ron
                 }
                 else if (reportLines[i].Contains("==========") && !reportLines[i].Contains(":"))
                 {
@@ -772,27 +797,87 @@ namespace fg1_mdc_update
                 }
                 else if (reportLines[i].Contains("I-131") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    sb.AppendLine(ReturnLine(reportLines[i], "I-131", report.i131Act, report.i131Res));
+                    if (showI131)
+                    {
+                        if (includeMDC)
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "I-131", report.i131Act, report.i131Res));
+                        }
+                        else
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "I-131", report.i131Act, ""));
+                        }
+                    }
                 }
                 else if (reportLines[i].Contains("Ru-103") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    sb.AppendLine(ReturnLine(reportLines[i], "Ru-103", report.ru103Act, report.ru103Res));
+                    if (showRu103)
+                    {
+                        if (includeMDC)
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Ru-103", report.ru103Act, report.ru103Res));
+                        }
+                        else
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Ru-103", report.ru103Act, ""));
+                        }
+                    }
                 }
                 else if (reportLines[i].Contains("Cs-137/Cs-134") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    sb.AppendLine(ReturnLine(reportLines[i], "Cs-137/Cs-134", report.cs137134Act, report.cs137134Res));
+                    if (show137134)
+                    {
+                        if (includeMDC)
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-137/Cs-134", report.cs137134Act, report.cs137134Res));
+                        }
+                        else
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-137/Cs-134", report.cs137134Act, ""));
+                        }
+                    }
                 }
                 else if (reportLines[i].Contains("Cs-137") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    sb.AppendLine(ReturnLine(reportLines[i], "Cs-137", report.cs137Act, report.cs137Res));
+                    if (showCs137)
+                    {
+                        if (includeMDC)
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-137", report.cs137Act, report.cs137Res));
+                        }
+                        else
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-137", report.cs137Act, ""));
+                        }
+                    }
                 }
                 else if (reportLines[i].Contains("Cs-134") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    sb.AppendLine(ReturnLine(reportLines[i], "Cs-134", report.cs134Act, report.cs134Res));
+                    if (showCs134)
+                    {
+                        if (includeMDC)
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-134", report.cs134Act, report.cs134Res));
+                        }
+                        else
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-134", report.cs134Act, ""));
+                        }
+                    }
                 }
                 else if (reportLines[i].Contains("K-40") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    sb.AppendLine(ReturnLine(reportLines[i], "K-40", report.k40Act, report.k40Res));
+                    if (showK40)
+                    {
+                        if (includeMDC)
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "K-40", report.k40Act, report.k40Res));
+                        }
+                        else
+                        {
+                            sb.AppendLine(ReturnLine(reportLines[i], "K-40", report.k40Act, ""));
+                        }
+                    }
                 }
                 else if (reportLines[i].Contains("Originator: _______________________________ Post: ______________________________"))
                 {
@@ -816,7 +901,18 @@ namespace fg1_mdc_update
             File.WriteAllText(newPath, sb.ToString());
             AppendHistory(originPath.Substring(originPath.LastIndexOf(@"\") + 1, originPath.Length - (originPath.LastIndexOf(@"\") + 1)));
             //System.Diagnostics.Process.Start(newPath);
-            System.Diagnostics.Process.Start(@"C:\Program Files\Windows NT\Accessories\wordpad.exe", newPath);
+            //System.Diagnostics.Process.Start(@"C:\Program Files\Windows NT\Accessories\wordpad.exe", newPath);
+
+
+            this.BeginInvoke((Action)delegate
+            {
+                Popup pu = new Popup(newPath);
+                //pu.fileName = newPath;
+                pu.Show();
+            });
+
+      
+      
         }
 
         public string ReturnLine(string line, string name, double act, string res)
@@ -846,7 +942,6 @@ namespace fg1_mdc_update
             }
             return name + space + act + s + secondSpace + d + lastSpace + res;
         }
-
 
         bool run = false;
         Thread readThread = null;
@@ -1033,6 +1128,8 @@ namespace fg1_mdc_update
             manualFilePath.Enabled = false;
             manualSelBtn.Enabled = false;
             manualReadBtn.Enabled = false;
+            autoPrintOn.Enabled = false;
+            autoPrintOff.Enabled = false;
         }
 
         public void EnableCtrl()
@@ -1046,6 +1143,8 @@ namespace fg1_mdc_update
             manualFilePath.Enabled = true;
             manualSelBtn.Enabled = true;
             manualReadBtn.Enabled = true;
+            autoPrintOn.Enabled = true;
+            autoPrintOff.Enabled = true;
         }
 
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
@@ -1065,12 +1164,32 @@ namespace fg1_mdc_update
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
             LoadJson();
             LoadHistory();
             openFileDialog1.FileName = "";
             openFileDialog2.FileName = "";
             openFileDialog3.FileName = "";
+            if (includeMDC)
+            {
+                includeMdcOn.Checked = true;
+                includeMdcOff.Checked = false;
+            }
+            //else
+            //{
+            //    includeMdcOn.Checked = false;
+            //    includeMdcOff.Checked = true;
+            //}
+
+            if (autoPrintOn.Checked)
+            {
+                autoPrint = true;
+            }
+            if (autoPrintOff.Checked)
+            {
+                autoPrint = false;
+            }
+            
+           
             if (thisSetup.autoMode == 1)
             {
                 readThread = new Thread(new ThreadStart(StartTrigger));
@@ -1093,5 +1212,30 @@ namespace fg1_mdc_update
                 }
             }
         }
+
+        private void autoPrintOn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autoPrintOn.Checked)
+            {
+                autoPrint = true;
+            }
+            if (autoPrintOff.Checked)
+            {
+                autoPrint = false;
+            }
+        }
+
+        private void autoPrintOff_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autoPrintOn.Checked)
+            {
+                autoPrint = true;
+            }
+            if (autoPrintOff.Checked)
+            {
+                autoPrint = false;
+            }
+        }
+
     }
 }
