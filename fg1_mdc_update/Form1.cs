@@ -11,6 +11,7 @@ using System.Web.Script.Serialization;
 using System.IO;
 using fg1_mdc_update.objClass;
 using System.Threading;
+using System.Drawing.Printing;
 
 namespace fg1_mdc_update
 {
@@ -24,8 +25,9 @@ namespace fg1_mdc_update
 
         public static bool autoPrint = false;
 
-        public const bool includeMDC = false;
-        public const bool showI131 = false;
+        public const bool includeMDC = true;
+        public const bool includeRatioSum = true;
+        public const bool showI131 = true;
         public const bool showRu103 = true;
         public const bool showCs137 = true;
         public const bool showCs134 = true;
@@ -770,7 +772,9 @@ namespace fg1_mdc_update
                     }
                     else
                     {
-                        sb.AppendLine("Radionuclide           Activity (Bq/Kg)          ");
+                        //int index = reportLines[i].IndexOf("Radionuclide");
+                        //sb.AppendLine(reportLines[i].Replace(reportLines[i].Substring(0, index), ""));
+                        sb.AppendLine(reportLines[i]);
                     }
                      // Modified MDC Value to Report Value by Ron
                 }
@@ -782,7 +786,7 @@ namespace fg1_mdc_update
                     }
                     else
                     {
-                        sb.AppendLine("Radionuclide           Activity (Bq/L)            ");
+                        sb.AppendLine(reportLines[i]);
                     }
                      // Modified MDC Value to Report Value by Ron
                 }
@@ -803,9 +807,9 @@ namespace fg1_mdc_update
                         {
                             sb.AppendLine(ReturnLine(reportLines[i], "I-131", report.i131Act, report.i131Res));
                         }
-                        else
+                        else 
                         {
-                            sb.AppendLine(ReturnLine(reportLines[i], "I-131", report.i131Act, ""));
+                            sb.AppendLine(reportLines[i]);
                         }
                     }
                 }
@@ -819,7 +823,7 @@ namespace fg1_mdc_update
                         }
                         else
                         {
-                            sb.AppendLine(ReturnLine(reportLines[i], "Ru-103", report.ru103Act, ""));
+                            sb.AppendLine(reportLines[i]);
                         }
                     }
                 }
@@ -833,7 +837,7 @@ namespace fg1_mdc_update
                         }
                         else
                         {
-                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-137/Cs-134", report.cs137134Act, ""));
+                            sb.AppendLine(reportLines[i]);
                         }
                     }
                 }
@@ -847,8 +851,9 @@ namespace fg1_mdc_update
                         }
                         else
                         {
-                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-137", report.cs137Act, ""));
+                            sb.AppendLine(reportLines[i]);
                         }
+                        
                     }
                 }
                 else if (reportLines[i].Contains("Cs-134") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
@@ -861,7 +866,7 @@ namespace fg1_mdc_update
                         }
                         else
                         {
-                            sb.AppendLine(ReturnLine(reportLines[i], "Cs-134", report.cs134Act, ""));
+                            sb.AppendLine(reportLines[i]);
                         }
                     }
                 }
@@ -875,7 +880,7 @@ namespace fg1_mdc_update
                         }
                         else
                         {
-                            sb.AppendLine(ReturnLine(reportLines[i], "K-40", report.k40Act, ""));
+                            sb.AppendLine(reportLines[i]);    
                         }
                     }
                 }
@@ -886,6 +891,13 @@ namespace fg1_mdc_update
                 else if (reportLines[i].Contains("                      (Name & Signature)"))
                 {
                     sb.AppendLine("                    (Name & Signature)");
+                }
+                else if (reportLines[i].Contains("Ratio Sum:"))
+                {
+                    if (includeRatioSum)
+                    {
+                        sb.AppendLine(reportLines[i]);
+                    }
                 }
                 else
                 {
@@ -906,14 +918,39 @@ namespace fg1_mdc_update
 
             this.BeginInvoke((Action)delegate
             {
-                Popup pu = new Popup(newPath);
-                //pu.fileName = newPath;
-                pu.Show();
+                //Popup pu = new Popup(newPath);
+                ////pu.fileName = newPath;
+                //pu.Show();
+                FileContents = sb.ToString();
+                PrintPreviewDialog ppd = new PrintPreviewDialog();
+                ppd.Width = Screen.PrimaryScreen.WorkingArea.Width;
+                ppd.Height = Screen.PrimaryScreen.WorkingArea.Height;
+                System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
+                pd.PrintPage += pd_PrintPage;
+                ppd.Document = pd;
+                ppd.ShowDialog();
             });
-
-      
-      
         }
+
+        private static string FileContents = "";
+        private void pd_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            using (Font font = new Font("Courier New", 10))
+            {
+                using (StringFormat string_format = new StringFormat())
+                {
+                    SizeF layout_area = new SizeF(e.MarginBounds.Width, e.MarginBounds.Height);
+                    int chars_fitted, lines_filled;
+                    e.Graphics.MeasureString(FileContents, font, layout_area, string_format, out chars_fitted, out lines_filled);
+                    e.Graphics.DrawString(FileContents.Substring(0, chars_fitted), font, Brushes.Black, e.MarginBounds, string_format);
+                    FileContents = FileContents.Substring(chars_fitted).Trim();
+                }
+            }
+
+            // See if we are done.
+            e.HasMorePages = FileContents.Length > 0;
+        }
+
 
         public string ReturnLine(string line, string name, double act, string res)
         {
