@@ -25,14 +25,15 @@ namespace fg1_mdc_update
 
         public static bool autoPrint = false;
 
-        public const bool includeMDC = true;
-        public const bool includeRatioSum = true;
-        public const bool showI131 = true;
-        public const bool showRu103 = true;
+        public const bool delRad = true;            // Radionuclide data deletion function
+        public const bool includeMDC = true;        // MDC Update function
+        public const bool includeRatioSum = false;
+        public const bool showI131 = false;         // Flag to show I-131 data
+        public const bool showRu103 = false;
         public const bool showCs137 = true;
         public const bool showCs134 = true;
-        public const bool showK40 = true;
-        public const bool show137134 = true;
+        public const bool showK40 = false;
+        public const bool show137134 = false;
 
         public const double i131Br = 0.817;
         public const double ru103Br = 0.91;
@@ -145,7 +146,7 @@ namespace fg1_mdc_update
             }
             else
             {
-                WriteLog("Select Report for Update : ");
+                WriteLog("Input Report File to Update : ");
             }
         }
 
@@ -172,15 +173,15 @@ namespace fg1_mdc_update
                         Calculate(haveUnCert, unitName);
                         WriteReport(manualFilePath.Text);
                     }
-                    WriteLogThread("Calculate Finished");
+                    WriteLogThread("Report Updated");
                 }
                 else if (isCal)
                 {
-                    WriteLogThread("Already Calculated");
+                    WriteLogThread("Report Already Updated");
                 }
                 else if (!isValid)
                 {
-                    WriteLogThread("Invalid file format");
+                    WriteLogThread("Invalid File Format");
                 }
             }
             else
@@ -477,7 +478,7 @@ namespace fg1_mdc_update
                 }
                 catch (Exception ex)
                 {
-                    WriteLogThread(ex.Message);
+                    // WriteLogThread(ex.Message); modified on 25 Jan 2018
                 }
 
                 if (!File.Exists(tempPath))
@@ -532,7 +533,7 @@ namespace fg1_mdc_update
                                     }
                                     catch (Exception ex)
                                     {
-                                        WriteLogThread(ex.Message);
+                                        WriteLogThread("Counting error" + ex.Message);
                                     }
                                 }
                                 //double start = BitConverter.ToDouble(by, 0);
@@ -542,7 +543,7 @@ namespace fg1_mdc_update
                         catch (Exception ex)
                         {
                             isRead = false;
-                            WriteLogThread(ex.Message);
+                            WriteLogThread("Binary Error:" + ex.Message);
                             Thread.Sleep(1000); // sleep 1 sec to wwait release
                         }
                         finally
@@ -575,7 +576,7 @@ namespace fg1_mdc_update
                 }
                 catch (Exception ex)
                 {
-                    WriteLogThread(ex.Message);
+                    //WriteLogThread("Copy .Dat error: " + ex.Message);
                 }
 
                 if (!File.Exists(tempPath))
@@ -766,21 +767,18 @@ namespace fg1_mdc_update
             {
                 if (reportLines[i].Contains("Radionuclide") && reportLines[i].Contains("Activity (Bq/Kg)"))
                 {
-                    if (includeMDC)
+                    if (includeMDC && includeMdcOn.Checked)
                     {
                         sb.AppendLine("Radionuclide           Activity (Bq/Kg)          Report Value (Bq/Kg)");
                     }
                     else
                     {
-                        //int index = reportLines[i].IndexOf("Radionuclide");
-                        //sb.AppendLine(reportLines[i].Replace(reportLines[i].Substring(0, index), ""));
                         sb.AppendLine(reportLines[i]);
                     }
-                     // Modified MDC Value to Report Value by Ron
                 }
                 else if (reportLines[i].Contains("Radionuclide") && reportLines[i].Contains("Activity (Bq/L)"))
                 {
-                    if (includeMDC)
+                    if (includeMDC && includeMdcOn.Checked)
                     {
                         sb.AppendLine("Radionuclide           Activity (Bq/L)            Report Value (Bq/L)");
                     }
@@ -788,7 +786,6 @@ namespace fg1_mdc_update
                     {
                         sb.AppendLine(reportLines[i]);
                     }
-                     // Modified MDC Value to Report Value by Ron
                 }
                 else if (reportLines[i].Contains("==========") && !reportLines[i].Contains(":"))
                 {
@@ -801,23 +798,27 @@ namespace fg1_mdc_update
                 }
                 else if (reportLines[i].Contains("I-131") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    if (showI131)
-                    {
-                        if (includeMDC)
+                    // Modified on 24 Jan 2018
+                    
+                    
+                    
+                    if (!(delRadOn.Checked && !showI131))        // show I-131 condition
                         {
+                        if (includeMDC && includeMdcOn.Checked)
+                            {
                             sb.AppendLine(ReturnLine(reportLines[i], "I-131", report.i131Act, report.i131Res));
-                        }
+                            }
                         else 
-                        {
+                            {
                             sb.AppendLine(reportLines[i]);
+                            }
                         }
-                    }
                 }
                 else if (reportLines[i].Contains("Ru-103") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    if (showRu103)
+                    if (!(delRadOn.Checked && !showRu103))        // show Ru-103 condition
                     {
-                        if (includeMDC)
+                        if (includeMDC && includeMdcOn.Checked)
                         {
                             sb.AppendLine(ReturnLine(reportLines[i], "Ru-103", report.ru103Act, report.ru103Res));
                         }
@@ -829,9 +830,9 @@ namespace fg1_mdc_update
                 }
                 else if (reportLines[i].Contains("Cs-137/Cs-134") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    if (show137134)
+                    if (!(delRadOn.Checked && !show137134))
                     {
-                        if (includeMDC)
+                        if (includeMDC && includeMdcOn.Checked)
                         {
                             sb.AppendLine(ReturnLine(reportLines[i], "Cs-137/Cs-134", report.cs137134Act, report.cs137134Res));
                         }
@@ -843,9 +844,9 @@ namespace fg1_mdc_update
                 }
                 else if (reportLines[i].Contains("Cs-137") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    if (showCs137)
+                    if (!(delRadOn.Checked && !showCs137))
                     {
-                        if (includeMDC)
+                        if (includeMDC && includeMdcOn.Checked)
                         {
                             sb.AppendLine(ReturnLine(reportLines[i], "Cs-137", report.cs137Act, report.cs137Res));
                         }
@@ -858,9 +859,9 @@ namespace fg1_mdc_update
                 }
                 else if (reportLines[i].Contains("Cs-134") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    if (showCs134)
+                    if (!(delRadOn.Checked && !showCs134))
                     {
-                        if (includeMDC)
+                        if (includeMDC && includeMdcOn.Checked)
                         {
                             sb.AppendLine(ReturnLine(reportLines[i], "Cs-134", report.cs134Act, report.cs134Res));
                         }
@@ -872,9 +873,9 @@ namespace fg1_mdc_update
                 }
                 else if (reportLines[i].Contains("K-40") && ((reportLines[i].Contains("Detected") || startWrite) || reportLines[i].Contains("Activity:")))
                 {
-                    if (showK40)
+                    if (!(delRadOn.Checked && !showK40))
                     {
-                        if (includeMDC)
+                        if (includeMDC && includeMdcOn.Checked)
                         {
                             sb.AppendLine(ReturnLine(reportLines[i], "K-40", report.k40Act, report.k40Res));
                         }
@@ -905,7 +906,7 @@ namespace fg1_mdc_update
                 }
             }
 
-            string newPath = originPath.Substring(0, originPath.LastIndexOf(".")).Replace(" ", "-") + "-MDC.txt";
+            string newPath = originPath.Substring(0, originPath.LastIndexOf(".")).Replace(" ", "-") + "-UPD.txt";
             if (File.Exists(newPath))
             {
                 File.Delete(newPath);
@@ -922,15 +923,51 @@ namespace fg1_mdc_update
                 ////pu.fileName = newPath;
                 //pu.Show();
                 FileContents = sb.ToString();
-                PrintPreviewDialog ppd = new PrintPreviewDialog();
-                ppd.Width = Screen.PrimaryScreen.WorkingArea.Width;
-                ppd.Height = Screen.PrimaryScreen.WorkingArea.Height;
-                System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
-                pd.PrintPage += pd_PrintPage;
-                ppd.Document = pd;
-                ppd.ShowDialog();
+                if (scrBtn.Checked) 
+                {
+                    //print thread
+                    Thread printThread = new Thread(new ThreadStart(ShowPrint));
+                    printThread.Start();
+                }
+                if (printBtn.Checked)
+                {
+                    //auto print
+                    PrintDocument pd = new PrintDocument();
+                    //PrinterSettings printerName = new PrinterSettings();
+                    //foreach (string s in PrinterSettings.InstalledPrinters)
+                    //{
+                      
+                    //}
+                    pd.DocumentName = newPath;
+                    pd.Print();
+
+                }
+                if (scrBtn.Checked || diskBtn.Checked)
+                {
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.Filter = "txt files (*.txt)|*.txt";
+                    sfd.FilterIndex = 2;
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        File.WriteAllText(sfd.FileName, FileContents);
+                    }
+                }
+
             });
         }
+
+        public void ShowPrint()
+        {
+
+            PrintPreviewDialog ppd = new PrintPreviewDialog();
+            ppd.Width = (Screen.PrimaryScreen.WorkingArea.Width) / 2;     // 27 Jan 2018
+            ppd.Height = Screen.PrimaryScreen.WorkingArea.Height;
+            System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
+            pd.PrintPage += pd_PrintPage;
+            ppd.Document = pd;
+            ppd.ShowDialog();
+        }
+
 
         private static string FileContents = "";
         private void pd_PrintPage(object sender, PrintPageEventArgs e)
@@ -1054,10 +1091,10 @@ namespace fg1_mdc_update
                             {
                                 foreach (string fileName in fileEntries)
                                 {
-                                    if (!fileName.Contains("-MDC"))
+                                    if (!fileName.Contains("-UPD"))
                                     {
                                         string fileExtension = Path.GetExtension(fileName);
-                                        string mdcName = fileName.Substring(0, fileName.LastIndexOf(".")).Replace(" ", "-") + "-MDC.txt";
+                                        string mdcName = fileName.Substring(0, fileName.LastIndexOf(".")).Replace(" ", "-") + "-UPD.txt";
                                         DateTime lastModifiedTime = File.GetLastWriteTime(fileName);
                                         bool isFound = FindInHistory(fileName.Substring(fileName.LastIndexOf(@"\") + 1, fileName.Length - (fileName.LastIndexOf(@"\") + 1)));// check if the report is chekced before
 
@@ -1105,12 +1142,12 @@ namespace fg1_mdc_update
                                             }
                                             else if (isCal)
                                             {
-                                                WriteLogThread("Already Calculated !");
+                                                WriteLogThread("Report Already Updated !");
                                                 AppendHistory(fileName.Substring(fileName.LastIndexOf(@"\") + 1, fileName.Length - (fileName.LastIndexOf(@"\") + 1)));
                                             }
                                             else if (!isValid)
                                             {
-                                                WriteLogThread("Invalid file format !");
+                                                WriteLogThread("Invalid File Format !");
                                                 AppendHistory(fileName.Substring(fileName.LastIndexOf(@"\") + 1, fileName.Length - (fileName.LastIndexOf(@"\") + 1)));
                                             }
                                         }
@@ -1146,7 +1183,7 @@ namespace fg1_mdc_update
             }
             catch (Exception ex)
             {
-                WriteLogThread(ex.Message);
+                // WriteLogThread(ex.Message); // Modified on 25 Jan 2018
             }
         }
 
@@ -1169,8 +1206,20 @@ namespace fg1_mdc_update
             manualFilePath.Enabled = false;
             manualSelBtn.Enabled = false;
             manualReadBtn.Enabled = false;
-            autoPrintOn.Enabled = false;
-            autoPrintOff.Enabled = false;
+            scrBtn.Enabled = true;  // 27 Jan 2018
+            printBtn.Enabled = true;
+            // added by Ron 24 Jan 18
+            if (!includeMDC)
+            {
+                includeMdcOn.Enabled = false;
+                includeMdcOff.Enabled = false;
+            }
+
+            if(!delRad)
+            {
+                delRadOff.Enabled = false;
+                delRadOn.Enabled = false;
+            }
         }
 
         public void EnableCtrl()
@@ -1184,8 +1233,21 @@ namespace fg1_mdc_update
             manualFilePath.Enabled = true;
             manualSelBtn.Enabled = true;
             manualReadBtn.Enabled = true;
-            autoPrintOn.Enabled = true;
-            autoPrintOff.Enabled = true;
+            scrBtn.Enabled = true;
+            printBtn.Enabled = true;
+
+            // added by Ron 24 Jan 2018
+            if ( includeMDC )
+                {
+                    includeMdcOn.Enabled = true;
+                    includeMdcOff.Enabled = true;
+                }
+
+            if (delRad)
+            {
+                delRadOff.Enabled = true;
+                delRadOn.Enabled = true;
+            }
         }
 
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
@@ -1210,22 +1272,23 @@ namespace fg1_mdc_update
             openFileDialog1.FileName = "";
             openFileDialog2.FileName = "";
             openFileDialog3.FileName = "";
-            if (includeMDC)
-            {
-                includeMdcOn.Checked = true;
-                includeMdcOff.Checked = false;
-            }
+
+            includeMdcOn.Checked = false;
+            includeMdcOff.Checked = true;
+            delRadOn.Checked = false;
+            delRadOff.Checked = true;
+
             //else
             //{
             //    includeMdcOn.Checked = false;
             //    includeMdcOff.Checked = true;
             //}
 
-            if (autoPrintOn.Checked)
+            if ( printBtn.Checked)
             {
                 autoPrint = true;
             }
-            if (autoPrintOff.Checked)
+            if (printBtn.Checked)
             {
                 autoPrint = false;
             }
@@ -1256,11 +1319,11 @@ namespace fg1_mdc_update
 
         private void autoPrintOn_CheckedChanged(object sender, EventArgs e)
         {
-            if (autoPrintOn.Checked)
+            if (printBtn.Checked)
             {
                 autoPrint = true;
             }
-            if (autoPrintOff.Checked)
+            if (printBtn.Checked)
             {
                 autoPrint = false;
             }
@@ -1268,14 +1331,25 @@ namespace fg1_mdc_update
 
         private void autoPrintOff_CheckedChanged(object sender, EventArgs e)
         {
-            if (autoPrintOn.Checked)
+            if (printBtn.Checked)
             {
                 autoPrint = true;
             }
-            if (autoPrintOff.Checked)
+            if (printBtn.Checked)
             {
                 autoPrint = false;
             }
+        }
+
+        
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void delRadOff_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
     }

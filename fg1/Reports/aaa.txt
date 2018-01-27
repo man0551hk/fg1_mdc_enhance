@@ -1,0 +1,46 @@
+                                        
+
+                       Contamination Monitoring Result by
+                   Food/Water Contamination Monitoring System
+
+From:                         Ficom Systems LTd
+Serial Number:                
+=====================================================================
+Sample Name/Type:             I-131 Test / Test
+Sampling Location:            Hong Kong
+Detector:                     DigiBASE
+Sample Weight:                1.00 Kilograms
+Alarm Reporting:              Absolute
+Food Type:                    CODEX - Imported Food
+Sample Team:                  Team A
+Sample Code:                  TI-HK-1709081644-FI-A
+Sampling Date:                08 / 09 / 2017 Sampling Time: 16 : 44
+                              DD / MM / YYYY                HH : MM
+Food Origin:                  I-131 from Japan
+=====================================================================
+Measurement Location:         I-131 from Japan
+
+Measurement Date/Time:        16 : 45     08 / 09 / 2017
+                              HH : MM     DD / MM / YYYY
+Counting Time:                1.00 Min
+
+          Radionuclide                 Activity (Bq/Kg)
+---------------------------------------------------------------------
+          I-131                                   33.47    Not Detected
+          Ru-103                                   1.96    Not Detected
+          Cs-137                                   0.00    Not Detected
+          Cs-134                                   8.75    Not Detected
+          K-40                                   850.03*   Detected
+          Cs-137/Cs-134                            8.75    Not Detected
+
+  Input Count Rate:          714.0667
+
+* Alarm Level Exceeded
+=====================================================================
+
+Originator: _________________________ Post: _________________________
+                    (Name & Signature)
+
+Date:  __ / __ / ____   Time:  __ : __
+       DD / MM / YYYY          HH : MM
+
