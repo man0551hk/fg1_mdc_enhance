@@ -916,18 +916,39 @@ namespace fg1_mdc_update
             //System.Diagnostics.Process.Start(newPath);
             //System.Diagnostics.Process.Start(@"C:\Program Files\Windows NT\Accessories\wordpad.exe", newPath);
 
-
+            FileContents = sb.ToString();
+            saveAsContents = sb.ToString();
             this.BeginInvoke((Action)delegate
             {
                 //Popup pu = new Popup(newPath);
                 ////pu.fileName = newPath;
                 //pu.Show();
-                FileContents = sb.ToString();
+              
                 if (scrBtn.Checked) 
                 {
                     //print thread
                     Thread printThread = new Thread(new ThreadStart(ShowPrint));
                     printThread.Start();
+
+                    //save as
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Would like to save file?", "Save as", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        SaveFileDialog sfd = new SaveFileDialog();
+                        sfd.Filter = "txt files (*.txt)|*.txt";
+                        sfd.FilterIndex = 2;
+                        if (sfd.ShowDialog() == DialogResult.OK)
+                        {
+                            File.WriteAllText(sfd.FileName, saveAsContents);
+                            historyLine.Add(sfd.FileName);
+                            AppendHistory(sfd.FileName);
+                        }
+                    }
+                    else if (dialogResult == DialogResult.No)
+                    {
+                        //do something else
+                    }
+
                 }
                 if (printBtn.Checked)
                 {
@@ -942,17 +963,10 @@ namespace fg1_mdc_update
                     pd.Print();
 
                 }
-                if (scrBtn.Checked || diskBtn.Checked)
+                if (scrBtn.Checked)
                 {
-                    SaveFileDialog sfd = new SaveFileDialog();
-                    sfd.Filter = "txt files (*.txt)|*.txt";
-                    sfd.FilterIndex = 2;
-                    if (sfd.ShowDialog() == DialogResult.OK)
-                    {
-                        File.WriteAllText(sfd.FileName, FileContents);
-                    }
-                }
 
+                }
             });
         }
 
@@ -970,6 +984,7 @@ namespace fg1_mdc_update
 
 
         private static string FileContents = "";
+        private static string saveAsContents = "";
         private void pd_PrintPage(object sender, PrintPageEventArgs e)
         {
             using (Font font = new Font("Courier New", 10))
