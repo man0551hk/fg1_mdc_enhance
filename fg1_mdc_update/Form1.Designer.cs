@@ -57,6 +57,8 @@
             this.diskBtn = new System.Windows.Forms.RadioButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.printReportBtn = new System.Windows.Forms.Button();
+            this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -97,7 +99,7 @@
             // 
             this.ctrlBtn.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ctrlBtn.ForeColor = System.Drawing.Color.Blue;
-            this.ctrlBtn.Location = new System.Drawing.Point(332, 70);
+            this.ctrlBtn.Location = new System.Drawing.Point(332, 66);
             this.ctrlBtn.Name = "ctrlBtn";
             this.ctrlBtn.Size = new System.Drawing.Size(100, 30);
             this.ctrlBtn.TabIndex = 9;
@@ -107,11 +109,11 @@
             // 
             // logText
             // 
-            this.logText.Location = new System.Drawing.Point(11, 154);
+            this.logText.Location = new System.Drawing.Point(11, 184);
             this.logText.Multiline = true;
             this.logText.Name = "logText";
             this.logText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logText.Size = new System.Drawing.Size(446, 164);
+            this.logText.Size = new System.Drawing.Size(446, 134);
             this.logText.TabIndex = 10;
             this.logText.TabStop = false;
             // 
@@ -119,7 +121,7 @@
             // 
             this.manualReadBtn.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.manualReadBtn.ForeColor = System.Drawing.Color.Blue;
-            this.manualReadBtn.Location = new System.Drawing.Point(332, 112);
+            this.manualReadBtn.Location = new System.Drawing.Point(332, 102);
             this.manualReadBtn.Name = "manualReadBtn";
             this.manualReadBtn.Size = new System.Drawing.Size(100, 30);
             this.manualReadBtn.TabIndex = 11;
@@ -259,9 +261,9 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(7, 102);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(132, 13);
+            this.label6.Size = new System.Drawing.Size(86, 13);
             this.label6.TabIndex = 23;
-            this.label6.Text = "Radionuclides Update";
+            this.label6.Text = "Simple Report";
             // 
             // delRadOn
             // 
@@ -276,10 +278,12 @@
             // delRadOff
             // 
             this.delRadOff.AutoSize = true;
+            this.delRadOff.Checked = true;
             this.delRadOff.Location = new System.Drawing.Point(63, 4);
             this.delRadOff.Name = "delRadOff";
             this.delRadOff.Size = new System.Drawing.Size(39, 17);
             this.delRadOff.TabIndex = 25;
+            this.delRadOff.TabStop = true;
             this.delRadOff.Text = "Off";
             this.delRadOff.UseVisualStyleBackColor = true;
             this.delRadOff.CheckedChanged += new System.EventHandler(this.delRadOff_CheckedChanged);
@@ -327,11 +331,24 @@
             this.panel3.Size = new System.Drawing.Size(120, 25);
             this.panel3.TabIndex = 29;
             // 
+            // printReportBtn
+            // 
+            this.printReportBtn.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.printReportBtn.ForeColor = System.Drawing.Color.Blue;
+            this.printReportBtn.Location = new System.Drawing.Point(333, 136);
+            this.printReportBtn.Name = "printReportBtn";
+            this.printReportBtn.Size = new System.Drawing.Size(100, 30);
+            this.printReportBtn.TabIndex = 30;
+            this.printReportBtn.Text = "Print";
+            this.printReportBtn.UseVisualStyleBackColor = true;
+            this.printReportBtn.Click += new System.EventHandler(this.printReportBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(469, 351);
+            this.Controls.Add(this.printReportBtn);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label7);
@@ -397,6 +414,8 @@
         private System.Windows.Forms.RadioButton diskBtn;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button printReportBtn;
+        private System.Windows.Forms.OpenFileDialog openFileDialog4;
     }
 }
 

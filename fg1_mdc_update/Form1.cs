@@ -33,7 +33,7 @@ namespace fg1_mdc_update
         public const bool showCs137 = true;
         public const bool showCs134 = true;
         public const bool showK40 = false;
-        public const bool show137134 = false;
+        public const bool show137134 = true;
 
         public const double i131Br = 0.817;
         public const double ru103Br = 0.91;
@@ -54,7 +54,7 @@ namespace fg1_mdc_update
         {
             InitializeComponent();
             this.FormClosing += Form1_FormClosing;
-
+           
         }
 
         public void LoadJson()
@@ -906,12 +906,30 @@ namespace fg1_mdc_update
                 }
             }
 
-            string newPath = originPath.Substring(0, originPath.LastIndexOf(".")).Replace(" ", "-") + "-UPD.txt";
-            if (File.Exists(newPath))
+            
+            // 19 Jan 2018
+            // Do not Append -UPD suffix; when BOTH includeMDCOff and delRadOff are ON
+
+            string newPath;
+            bool noNeedToSave = false;
+            if ( includeMdcOff.Checked && delRadOff.Checked)
             {
-                File.Delete(newPath);
+                noNeedToSave = true;
+                newPath = originPath;
             }
-            File.WriteAllText(newPath, sb.ToString());
+            else
+            {
+                newPath = originPath.Substring(0, originPath.LastIndexOf(".")).Replace(" ", "-") + "-UPD.txt";
+            }
+            if(noNeedToSave == false)
+            {
+                if (File.Exists(newPath))
+                {
+                    File.Delete(newPath);
+                }
+                File.WriteAllText(newPath, sb.ToString());
+            }
+            
             AppendHistory(originPath.Substring(originPath.LastIndexOf(@"\") + 1, originPath.Length - (originPath.LastIndexOf(@"\") + 1)));
             //System.Diagnostics.Process.Start(newPath);
             //System.Diagnostics.Process.Start(@"C:\Program Files\Windows NT\Accessories\wordpad.exe", newPath);
@@ -976,6 +994,7 @@ namespace fg1_mdc_update
             PrintPreviewDialog ppd = new PrintPreviewDialog();
             ppd.Width = (Screen.PrimaryScreen.WorkingArea.Width) / 2;     // 27 Jan 2018
             ppd.Height = Screen.PrimaryScreen.WorkingArea.Height;
+           
             System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
             pd.PrintPage += pd_PrintPage;
             ppd.Document = pd;
@@ -1001,6 +1020,10 @@ namespace fg1_mdc_update
 
             // See if we are done.
             e.HasMorePages = FileContents.Length > 0;
+            if (!e.HasMorePages)
+            {
+                FileContents = saveAsContents;
+            }
         }
 
 
@@ -1292,7 +1315,7 @@ namespace fg1_mdc_update
             includeMdcOff.Checked = true;
             delRadOn.Checked = false;
             delRadOff.Checked = true;
-
+            openFileDialog4.InitialDirectory = fg1Path.Text;
             //else
             //{
             //    includeMdcOn.Checked = false;
@@ -1366,6 +1389,17 @@ namespace fg1_mdc_update
         {
 
         }
+
+        private void printReportBtn_Click(object sender, EventArgs e)
+        {
+            openFileDialog4.InitialDirectory = "C:\\User\\FoodGuard-1\\Reports\\";  // 29 Jan 2018 Set Default Report Directory
+            if (openFileDialog4.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(openFileDialog4.FileName))
+            {
+                FileContents = File.ReadAllText(openFileDialog4.FileName);
+                saveAsContents = FileContents;
+                ShowPrint();
+            }
+        } 
 
     }
 }
